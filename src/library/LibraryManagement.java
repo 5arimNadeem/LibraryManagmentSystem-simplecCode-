@@ -5,30 +5,14 @@ import java.util.List;
 import java.util.Scanner;
 
 public class LibraryManagement {
-    private String libraryName;
-    private String libraryAddress;
-    private int libraryPinCode;
     private List<Book> books;
     private Scanner scanner;
+    private Methods methods;
 
     public LibraryManagement() {
         this.books = new ArrayList<>();
         this.scanner = new Scanner(System.in);
-        initializeLibrary();
-    }
-
-    private void initializeLibrary() {
-        System.out.print("Enter the name of the library: ");
-        libraryName = scanner.nextLine();
-        System.out.print("Enter the address of the library: ");
-        libraryAddress = scanner.nextLine();
-        System.out.print("Enter the pin code of the library: ");
-        try {
-            libraryPinCode = Integer.parseInt(scanner.nextLine());
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid pin code. Using default (0).");
-            libraryPinCode = 0;
-        }
+        this.methods = new Methods();
     }
 
     public void run() {
@@ -57,107 +41,25 @@ public class LibraryManagement {
                     running = false;
                     break;
                 case 1:
-                    addBook();
+                    methods.addBook();
                     break;
                 case 2:
-                    updateBook();
+                    methods.updateBook();
                     break;
                 case 3:
-                    getBook();
+                    methods.getBook();
                     break;
                 case 4:
-                    deleteBook();
+                    methods.deleteBook();
                     break;
                 case 5:
-                    listAllBooks();
+                    methods.listAllBooks();
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
         }
         scanner.close();
-    }
-
-    private void addBook() {
-        System.out.print("Enter book name: ");
-        String bookName = scanner.nextLine();
-        System.out.print("Enter author name: ");
-        String authorName = scanner.nextLine();
-
-        if (bookName == null || bookName.trim().isEmpty()) {
-            System.out.println("Failed to add book. Name cannot be empty.");
-            return;
-        }
-
-        Book book = new Book(bookName, authorName);
-        books.add(book);
-        System.out.println("Book added successfully.");
-    }
-
-    private void updateBook() {
-        System.out.print("Enter the name of the book to update: ");
-        String oldBookName = scanner.nextLine();
-        Book book = findBook(oldBookName);
-        if (book == null) {
-            System.out.println("Book not found.");
-            return;
-        }
-
-        System.out.print("Enter new book name (press Enter to skip): ");
-        String newBookName = scanner.nextLine();
-        System.out.print("Enter new author name (press Enter to skip): ");
-        String newAuthorName = scanner.nextLine();
-
-        if (!newBookName.isEmpty()) {
-            book.setBookName(newBookName);
-        }
-        if (!newAuthorName.isEmpty()) {
-            book.setBookAuthor(newAuthorName);
-        }
-        System.out.println("Book updated successfully.");
-    }
-
-    private void getBook() {
-        System.out.print("Enter book name to search: ");
-        String bookName = scanner.nextLine();
-        Book book = findBook(bookName);
-        if (book != null) {
-            System.out.println("Book found: " + book);
-        } else {
-            System.out.println("Book not found.");
-        }
-    }
-
-    private void deleteBook() {
-        System.out.print("Enter book name to delete: ");
-        String bookName = scanner.nextLine();
-        Book book = findBook(bookName);
-        if (book != null) {
-            books.remove(book);
-            System.out.println("Book deleted successfully.");
-        } else {
-            System.out.println("Book not found.");
-        }
-    }
-
-    private void listAllBooks() {
-        if (books.isEmpty()) {
-            System.out.println("No books available in the library.");
-        } else {
-            System.out.println("Books in the library:");
-            for (Book book : books) {
-                System.out.println(book);
-            }
-        }
-    }
-
-    private Book findBook(String bookName) {
-        for (Book book : books) {
-            if (book.getBookName().equalsIgnoreCase(bookName)) {
-                return book;
-            }
-        }
-        return null;
     }
 
     public static void main(String[] args) {
